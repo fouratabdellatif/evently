@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ticket index{% endblock %}
+
+{% block body %}
+    <h1>Ticket index</h1>
+
+	<div id="div_chart"></div>
+
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+		{{ gc_draw(piechart, "div_chart") }}</script>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nomclient</th>
+                <th>Prixticket</th>
+                <th>Nomevent</th>
+                <th>NbrTicket</th>
+                <th>Evenement</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket.nomclient }}</td>
+                <td>{{ ticket.prixticket }}</td>
+                <td>{{ ticket.nomevent }}</td>
+                <td>{{ ticket.nbrTicket }}</td>
+                <td>{{ ticket.event }}</td>
+                <td>
+                    <a href="{{ path('admin_ticket_show', {'idticket': ticket.idticket}) }}">show</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

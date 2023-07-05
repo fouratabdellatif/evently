@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Evenement index{% endblock %}
+
+{% block body %}
+    <h1>Evenement index</h1>
+
+    <form id="search-form" action="{{ path('evenement_search') }}" method="get">
+        <div class="form-group">
+            <input type="text" name="q" class="form-control" value="{{ query }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <hr>
+    
+    <a class="btn btn-primary" href="{{path('sort_by_asc_nbdispo')}}">Nombre de places Asc</a>
+    <a class="btn btn-primary" href="{{path('sort_by_desc_nbdispo')}}">Nombre de places Desc</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nomevent</th>
+                <th>Adresseevent</th>
+                <th>Capaciteevent</th>
+                <th>Nbrticketdispo</th>
+                <th>Datedebutevent</th>
+                <th>Datefinevent</th>
+                <th>Descriptionevent</th>
+                <th>Prixentre</th>
+                <th>Image1</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for evenement in evenements %}
+            <tr>
+                <td>{{ evenement.nomevent }}</td>
+                <td>{{ evenement.adresseevent }}</td>
+                <td>{{ evenement.capaciteevent }}</td>
+                <td>{{ evenement.nbrticketdispo }}</td>
+                <td>{{ evenement.datedebutevent }}</td>
+                <td>{{ evenement.datefinevent }}</td>
+                <td>{{ evenement.descriptionevent }}</td>
+                <td>{{ evenement.prixentre }}</td>
+                <td><img width="100" height="100" src="{{ asset('uploads/' ~ evenement.image1) }}" /></td>
+                <td>
+                    <a href="{{ path('admin_evenement_show', {'idevent': evenement.idevent}) }}">show</a>
+                    <a href="{{ path('admin_evenement_edit', {'idevent': evenement.idevent}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('admin_evenement_new') }}">Create new</a>
+
+    <script>
+        $(function () {
+            $('#search-form').submit(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    success: function (data) {
+                        $('#search-results').html(data);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
